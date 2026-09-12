@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Customer dashboard</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/login.css" />
+  <link rel="stylesheet" href="css/dashboard.css" />
+</head>
+<body>
+  <div class="shell">
+    <aside class="side">
+      <div class="brand">Hot<span>Route</span></div>
+      <button class="active" data-view="request">Create meal request</button>
+      <button data-view="requests">My meal requests</button>
+      <button data-view="quotes">Quotations</button>
+      <button data-view="orders">My orders</button>
+      <button data-view="track">Track delivery</button>
+      <button data-view="profile">Profile</button>
+      <button data-view="notes">Notifications</button>
+      <button id="logout">Logout</button>
+    </aside>
+    <main class="main">
+      <div class="toolbar">
+        <div>
+          <h2 id="hello">Customer</h2>
+          <div class="muted">Post a meal, pick a quote, watch the rider.</div>
+        </div>
+        <span class="badge" id="who"></span>
+      </div>
+      <section id="request" class="card">
+        <h3>New meal request</h3>
+        <div class="form-grid">
+          <div><label>Quantity</label><input id="qty" type="number" min="1" value="10" /></div>
+          <div><label>Delivery date & time</label><input id="ddate" type="datetime-local" /></div>
+        </div>
+        <label>Delivery address</label><input id="daddr" placeholder="Office / home address" />
+        <label>Food description</label><textarea id="fdesc" placeholder="100 chicken rice packs, mild spice"></textarea>
+        <button class="btn" id="createReq">Submit request</button>
+        <div class="error" id="reqMsg"></div>
+      </section>
+      <section id="requests" class="hidden list"></section>
+      <section id="quotes" class="hidden list"></section>
+      <section id="orders" class="hidden list"></section>
+      <section id="track" class="hidden">
+        <label>Select order</label>
+        <select id="trackOrder"></select>
+        <div class="map" id="map"></div>
+        <p class="muted" id="trackMeta"></p>
+      </section>
+      <section id="profile" class="hidden card">
+        <h3>Profile</h3>
+        <label>Organization</label><input id="pName" />
+        <label>Contact</label><input id="pContact" />
+        <label>Address</label><input id="pAddr" />
+        <button class="btn" id="saveProfile">Save</button>
+        <div class="error" id="profMsg"></div>
+      </section>
+      <section id="notes" class="hidden list"></section>
+    </main>
+  </div>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/map.js"></script>
+  <script src="js/consumer.js"></script>
+  <script src="js/order.js"></script>
+</body>
+</html>

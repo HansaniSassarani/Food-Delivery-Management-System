@@ -1,0 +1,10 @@
+{
+  "info": { "name": "Provider-Service", "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json" },
+  "item": [
+    { "name": "Register", "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }], "url": "http://localhost:8082/api/providers/register", "body": { "mode": "raw", "raw": "{\n  \"organizationName\": \"Spice Hub\",\n  \"email\": \"provider@test.com\",\n  \"contactNo\": \"0711111111\",\n  \"password\": \"pass123\",\n  \"address\": \"Bambalapitiya\",\n  \"capacity\": 80,\n  \"latitude\": 6.8916,\n  \"longitude\": 79.8567\n}" } } },
+    { "name": "Login", "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }], "url": "http://localhost:8082/api/providers/login", "body": { "mode": "raw", "raw": "{\n  \"email\": \"provider@test.com\",\n  \"password\": \"pass123\"\n}" } } },
+    { "name": "Add Food Item", "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }, { "key": "Authorization", "value": "Bearer {{providerToken}}" }], "url": "http://localhost:8082/api/food-items", "body": { "mode": "raw", "raw": "{\n  \"name\": \"Chicken Rice\",\n  \"description\": \"Steamed rice with curry\",\n  \"price\": 650,\n  \"availableQuantity\": 100\n}" } } },
+    { "name": "Available Meal Requests", "request": { "method": "GET", "header": [{ "key": "Authorization", "value": "Bearer {{providerToken}}" }], "url": "http://localhost:8082/api/quotations/available" } },
+    { "name": "Submit Quotation", "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }, { "key": "Authorization", "value": "Bearer {{providerToken}}" }], "url": "http://localhost:8082/api/quotations", "body": { "mode": "raw", "raw": "{\n  \"mealRequestId\": 1,\n  \"price\": 16250,\n  \"estimatedTime\": 45,\n  \"notes\": \"Can deliver by noon\"\n}" } } }
+  ]
+}

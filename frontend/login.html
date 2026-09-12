@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Login · HotRoute</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/login.css" />
+</head>
+<body class="auth-page">
+  <form class="hero auth-card" id="form">
+    <div class="brand">Hot<span>Route</span></div>
+    <h1>Welcome back</h1>
+    <p>Sign in as a customer, provider, or delivery rider.</p>
+    <div class="tabs">
+      <button type="button" class="tab active" data-role="CONSUMER">Customer</button>
+      <button type="button" class="tab" data-role="PROVIDER">Provider</button>
+      <button type="button" class="tab" data-role="DELIVERY">Rider</button>
+    </div>
+    <label>Email</label>
+    <input type="email" name="email" required />
+    <label>Password</label>
+    <input type="password" name="password" required />
+    <div class="error" id="error"></div>
+    <button class="btn full" type="submit">Login</button>
+    <p>New here? <a href="register.html">Register</a></p>
+  </form>
+  <script src="js/auth.js"></script>
+  <script>
+    let role = "CONSUMER";
+    document.querySelectorAll(".tab").forEach(tab => {
+      tab.onclick = () => {
+        document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
+        tab.classList.add("active");
+        role = tab.dataset.role;
+      };
+    });
+    document.getElementById("form").onsubmit = async (e) => {
+      e.preventDefault();
+      const fd = new FormData(e.target);
+      const payload = { email: fd.get("email"), password: fd.get("password") };
+      const error = document.getElementById("error");
+      try {
+        let data;
+        if (role === "CONSUMER") data = await api(API.consumer, "/api/auth/login", { method: "POST", body: JSON.stringify(payload) });
+        if (role === "PROVIDER") data = await api(API.provider, "/api/providers/login", { method: "POST", body: JSON.stringify(payload) });
+        if (role === "DELIVERY") data = await api(API.order, "/api/delivery/login", { method: "POST", body: JSON.stringify(payload) });
+        auth.save(data);
+        location.href = role === "CONSUMER" ? "consumer-dashboard.html" : role === "PROVIDER" ? "provider-dashboard.html" : "delivery-dashboard.html";
+      } catch (err) {
+        toast(error, err.message);
+      }
+    };
+  </script>
+</body>
+</html>

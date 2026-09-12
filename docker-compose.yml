@@ -1,0 +1,84 @@
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: fdms-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./database/init.sql:/docker-entrypoint-initdb.d/00-init.sql
+      - ./database/consumer_db.sql:/docker-entrypoint-initdb.d/01-consumer.sql
+      - ./database/provider_db.sql:/docker-entrypoint-initdb.d/02-provider.sql
+      - ./database/order_db.sql:/docker-entrypoint-initdb.d/03-order.sql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-proot"]
+      interval: 8s
+      timeout: 5s
+      retries: 20
+
+  consumer-service:
+    build: ./consumer-service
+    container_name: fdms-consumer
+    depends_on:
+      mysql:
+        condition: service_healthy
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/consumer_db?createDatabaseIfNotExist=true&allowPublicKeyRetrieval=true&useSSL=false
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
+      JWT_SECRET: FoodDeliveryJwtSecretKeyMustBeAtLeast256BitsLongForHS256!!
+      PROVIDER_SERVICE_URL: http://provider-service:8082
+      ORDER_SERVICE_URL: http://order-service:8083
+    ports:
+      - "8081:8081"
+
+  provider-service:
+    build: ./provider-service
+    container_name: fdms-provider
+    depends_on:
+      mysql:
+        condition: service_healthy
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/provider_db?createDatabaseIfNotExist=true&allowPublicKeyRetrieval=true&useSSL=false
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
+      JWT_SECRET: FoodDeliveryJwtSecretKeyMustBeAtLeast256BitsLongForHS256!!
+      CONSUMER_SERVICE_URL: http://consumer-service:8081
+      ORDER_SERVICE_URL: http://order-service:8083
+    ports:
+      - "8082:8082"
+
+  order-service:
+    build: ./order-service
+    container_name: fdms-order
+    depends_on:
+      mysql:
+        condition: service_healthy
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/order_db?createDatabaseIfNotExist=true&allowPublicKeyRetrieval=true&useSSL=false
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
+      JWT_SECRET: FoodDeliveryJwtSecretKeyMustBeAtLeast256BitsLongForHS256!!
+      CONSUMER_SERVICE_URL: http://consumer-service:8081
+      PROVIDER_SERVICE_URL: http://provider-service:8082
+    ports:
+      - "8083:8083"
+
+  frontend:
+    image: nginx:alpine
+    container_name: fdms-frontend
+    depends_on:
+      - consumer-service
+      - provider-service
+      - order-service
+    ports:
+      - "8080:80"
+    volumes:
+      - ./frontend:/usr/share/nginx/html:ro
+      - ./frontend/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+
+volumes:
+  mysql_data:

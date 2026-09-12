@@ -1,0 +1,18 @@
+{
+  "info": { "name": "Food-Delivery-System", "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json" },
+  "item": [
+    { "name": "Auth", "item": [
+      { "name": "Consumer Login", "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }], "url": "http://localhost:8081/api/auth/login", "body": { "mode": "raw", "raw": "{\n  \"email\": \"consumer@test.com\",\n  \"password\": \"pass123\"\n}" } } },
+      { "name": "Provider Login", "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }], "url": "http://localhost:8082/api/providers/login", "body": { "mode": "raw", "raw": "{\n  \"email\": \"provider@test.com\",\n  \"password\": \"pass123\"\n}" } } },
+      { "name": "Rider Register", "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }], "url": "http://localhost:8083/api/delivery/register", "body": { "mode": "raw", "raw": "{\n  \"fullName\": \"Kasun Perera\",\n  \"email\": \"rider@test.com\",\n  \"contactNo\": \"0750000000\",\n  \"password\": \"pass123\"\n}" } } },
+      { "name": "Rider Login", "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }], "url": "http://localhost:8083/api/delivery/login", "body": { "mode": "raw", "raw": "{\n  \"email\": \"rider@test.com\",\n  \"password\": \"pass123\"\n}" } } }
+    ]},
+    { "name": "Delivery", "item": [
+      { "name": "Available Riders", "request": { "method": "GET", "header": [{ "key": "Authorization", "value": "Bearer {{riderToken}}" }], "url": "http://localhost:8083/api/delivery/available" } },
+      { "name": "Open Requests", "request": { "method": "GET", "header": [{ "key": "Authorization", "value": "Bearer {{riderToken}}" }], "url": "http://localhost:8083/api/delivery/requests" } },
+      { "name": "Accept Delivery", "request": { "method": "POST", "header": [{ "key": "Authorization", "value": "Bearer {{riderToken}}" }], "url": "http://localhost:8083/api/delivery/1/accept" } },
+      { "name": "Update Location", "request": { "method": "PUT", "header": [{ "key": "Content-Type", "value": "application/json" }, { "key": "Authorization", "value": "Bearer {{riderToken}}" }], "url": "http://localhost:8083/api/delivery/1/location", "body": { "mode": "raw", "raw": "{\n  \"latitude\": 6.91,\n  \"longitude\": 79.86\n}" } } },
+      { "name": "Mark Delivered", "request": { "method": "PUT", "header": [{ "key": "Content-Type", "value": "application/json" }, { "key": "Authorization", "value": "Bearer {{riderToken}}" }], "url": "http://localhost:8083/api/delivery/1/status", "body": { "mode": "raw", "raw": "{\n  \"status\": \"DELIVERED\"\n}" } } }
+    ]}
+  ]
+}

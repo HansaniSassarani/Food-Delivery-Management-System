@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Delivery dashboard</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/login.css" />
+  <link rel="stylesheet" href="css/dashboard.css" />
+</head>
+<body>
+  <div class="shell">
+    <aside class="side">
+      <div class="brand">Hot<span>Route</span></div>
+      <button class="active" data-view="jobs">New requests</button>
+      <button data-view="current">Current delivery</button>
+      <button data-view="history">History</button>
+      <button data-view="profile">Availability</button>
+      <button data-view="notes">Notifications</button>
+      <button id="logout">Logout</button>
+    </aside>
+    <main class="main">
+      <div class="toolbar">
+        <div><h2>Rider workspace</h2><div class="muted">Accept jobs and share GPS like a ride-booking app.</div></div>
+        <span class="badge" id="who"></span>
+      </div>
+      <section id="jobs" class="list"></section>
+      <section id="current" class="hidden">
+        <div class="map" id="map"></div>
+        <p class="muted" id="curMeta"></p>
+        <div class="row" id="curActions"></div>
+      </section>
+      <section id="history" class="hidden list"></section>
+      <section id="profile" class="hidden card">
+        <label>Status</label>
+        <select id="st">
+          <option>AVAILABLE</option>
+          <option>BUSY</option>
+          <option>OFFLINE</option>
+        </select>
+        <button class="btn" id="saveSt">Update</button>
+        <div class="error" id="stMsg"></div>
+      </section>
+      <section id="notes" class="hidden list"></section>
+    </main>
+  </div>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/map.js"></script>
+  <script src="js/delivery.js"></script>
+</body>
+</html>

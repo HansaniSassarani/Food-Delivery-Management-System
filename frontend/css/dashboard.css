@@ -1,0 +1,24 @@
+.shell { display: grid; grid-template-columns: 250px 1fr; min-height: 100vh; }
+.side {
+  background: #121b24; border-right: 1px solid var(--line); padding: 22px 16px;
+  display: flex; flex-direction: column; gap: 8px;
+}
+.side button {
+  text-align: left; background: transparent; color: var(--text); border: 0;
+  padding: 11px 12px; border-radius: 10px; cursor: pointer;
+}
+.side button.active, .side button:hover { background: #223344; }
+.main { padding: 28px; }
+.toolbar { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 18px; }
+.badge { background: #2a3d30; color: #9be7c4; padding: 4px 10px; border-radius: 999px; font-size: 12px; }
+.list { display: grid; gap: 12px; }
+.item { padding: 16px; }
+.item h4 { margin: 0 0 8px; }
+.muted { color: var(--muted); font-size: 14px; }
+.map { height: 380px; border-radius: 16px; overflow: hidden; border: 1px solid var(--line); }
+.hidden { display: none !important; }
+.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+@media (max-width: 860px) {
+  .shell { grid-template-columns: 1fr; }
+  .form-grid { grid-template-columns: 1fr; }
+}

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Provider dashboard</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/login.css" />
+  <link rel="stylesheet" href="css/dashboard.css" />
+</head>
+<body>
+  <div class="shell">
+    <aside class="side">
+      <div class="brand">Hot<span>Route</span></div>
+      <button class="active" data-view="menu">Food items</button>
+      <button data-view="open">Open meal requests</button>
+      <button data-view="quotes">My quotations</button>
+      <button data-view="capacity">Capacity & availability</button>
+      <button data-view="orders">Orders</button>
+      <button data-view="notes">Notifications</button>
+      <button id="logout">Logout</button>
+    </aside>
+    <main class="main">
+      <div class="toolbar">
+        <div><h2>Provider workspace</h2><div class="muted">Quote on requests you can fulfil.</div></div>
+        <span class="badge" id="who"></span>
+      </div>
+      <section id="menu" class="card">
+        <h3>Add food item</h3>
+        <div class="form-grid">
+          <div><label>Name</label><input id="fname" /></div>
+          <div><label>Price</label><input id="fprice" type="number" min="0" /></div>
+        </div>
+        <label>Description</label><input id="fdesc" />
+        <label>Available quantity</label><input id="fqty" type="number" min="0" value="20" />
+        <button class="btn" id="addFood">Save item</button>
+        <div class="error" id="foodMsg"></div>
+        <div id="foodList" class="list" style="margin-top:16px"></div>
+      </section>
+      <section id="open" class="hidden list"></section>
+      <section id="quotes" class="hidden list"></section>
+      <section id="capacity" class="hidden card">
+        <label>Capacity</label><input id="cap" type="number" min="1" />
+        <label>Availability</label>
+        <select id="avail">
+          <option>AVAILABLE</option>
+          <option>UNAVAILABLE</option>
+        </select>
+        <button class="btn" id="saveCap">Update</button>
+        <div class="error" id="capMsg"></div>
+      </section>
+      <section id="orders" class="hidden list"></section>
+      <section id="notes" class="hidden list"></section>
+    </main>
+  </div>
+  <script src="js/auth.js"></script>
+  <script src="js/provider.js"></script>
+</body>
+</html>

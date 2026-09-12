@@ -1,0 +1,22 @@
+pipeline {
+    agent any
+    stages {
+        stage('Checkout') { steps { checkout scm } }
+        stage('Build') {
+            steps {
+                dir('consumer-service') { sh 'mvn -q -DskipTests package' }
+                dir('provider-service') { sh 'mvn -q -DskipTests package' }
+                dir('order-service') { sh 'mvn -q -DskipTests package' }
+            }
+        }
+        stage('Unit Test') {
+            steps {
+                dir('consumer-service') { sh 'mvn -q test' }
+                dir('provider-service') { sh 'mvn -q test' }
+                dir('order-service') { sh 'mvn -q test' }
+            }
+        }
+        stage('Docker Build') { steps { sh 'docker compose build' } }
+        stage('Deploy') { steps { sh 'docker compose up -d' } }
+    }
+}

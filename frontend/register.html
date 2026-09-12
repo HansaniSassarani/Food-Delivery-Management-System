@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Register · HotRoute</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/login.css" />
+</head>
+<body class="auth-page">
+  <form class="hero auth-card" id="form">
+    <div class="brand">Hot<span>Route</span></div>
+    <h1>Create account</h1>
+    <p>Join as a customer organization, food provider, or rider.</p>
+    <div class="tabs">
+      <button type="button" class="tab active" data-role="CONSUMER">Customer</button>
+      <button type="button" class="tab" data-role="PROVIDER">Provider</button>
+      <button type="button" class="tab" data-role="DELIVERY">Rider</button>
+    </div>
+    <label id="nameLabel">Organization name</label>
+    <input name="name" required />
+    <label>Email</label>
+    <input type="email" name="email" required />
+    <label>Contact number</label>
+    <input name="contactNo" required />
+    <label>Password</label>
+    <input type="password" name="password" minlength="6" required />
+    <div id="addressBlock">
+      <label>Address</label>
+      <input name="address" />
+    </div>
+    <div class="error" id="error"></div>
+    <button class="btn full" type="submit">Register</button>
+    <p>Already registered? <a href="login.html">Login</a></p>
+  </form>
+  <script src="js/auth.js"></script>
+  <script>
+    let role = "CONSUMER";
+    const nameLabel = document.getElementById("nameLabel");
+    const addressBlock = document.getElementById("addressBlock");
+    document.querySelectorAll(".tab").forEach(tab => {
+      tab.onclick = () => {
+        document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
+        tab.classList.add("active");
+        role = tab.dataset.role;
+        nameLabel.textContent = role === "DELIVERY" ? "Full name" : "Organization name";
+        addressBlock.classList.toggle("hidden", role === "DELIVERY");
+      };
+    });
+    document.getElementById("form").onsubmit = async (e) => {
+      e.preventDefault();
+      const fd = new FormData(e.target);
+      const error = document.getElementById("error");
+      try {
+        let data;
+        if (role === "DELIVERY") {
+          data = await api(API.order, "/api/delivery/register", { method: "POST", body: JSON.stringify({
+            fullName: fd.get("name"), email: fd.get("email"), contactNo: fd.get("contactNo"), password: fd.get("password")
+          })});
+        } else if (role === "PROVIDER") {
+          data = await api(API.provider, "/api/providers/register", { method: "POST", body: JSON.stringify({
+            organizationName: fd.get("name"), email: fd.get("email"), contactNo: fd.get("contactNo"),
+            password: fd.get("password"), address: fd.get("address") || "Colombo"
+          })});
+        } else {
+          data = await api(API.consumer, "/api/consumers/register", { method: "POST", body: JSON.stringify({
+            organizationName: fd.get("name"), email: fd.get("email"), contactNo: fd.get("contactNo"),
+            password: fd.get("password"), address: fd.get("address") || "Colombo"
+          })});
+        }
+        auth.save(data);
+        location.href = role === "CONSUMER" ? "consumer-dashboard.html" : role === "PROVIDER" ? "provider-dashboard.html" : "delivery-dashboard.html";
+      } catch (err) {
+        toast(error, err.message);
+      }
+    };
+  </script>
+</body>
+</html>
